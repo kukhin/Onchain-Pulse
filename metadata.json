@@ -1,0 +1,6 @@
+{
+  "name": "Base Pulse",
+  "description": "Daily on-chain check-in for the Base ecosystem. Connect, pulse, and climb the leaderboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
