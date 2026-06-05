@@ -8,15 +8,17 @@ import { base } from "wagmi/chains";
 const BUILDER_CODE = "bc_smhxjgjq";
 
 /**
- * Converts a builder code string to a 16-byte hex suffix
+ * Converts a builder code string to a 16-byte hex suffix (ERC-8021)
+ * The full string (including 'bc_') is encoded as ASCII and padded to 16 bytes.
  */
 function getBuilderSuffix(code: string): `0x${string}` {
-  const stripped = code.replace("bc_", "");
-  // Convert to ASCII hex and pad to 16 bytes (32 chars)
+  // Convert full string to ASCII hex
   let hex = "";
-  for (let i = 0; i < stripped.length; i++) {
-    hex += stripped.charCodeAt(i).toString(16);
+  for (let i = 0; i < code.length; i++) {
+    const charCode = code.charCodeAt(i);
+    hex += charCode.toString(16).padStart(2, "0");
   }
+  // Pad the rest with zeros to reach 16 bytes (32 hex characters)
   return `0x${hex.padEnd(32, "0")}` as `0x${string}`;
 }
 
