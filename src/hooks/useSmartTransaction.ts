@@ -5,7 +5,7 @@ import { base } from "wagmi/chains";
 
 // ERC-8021: Builder address suffix (20 bytes)
 // Registered on base.dev
-const BUILDER_ADDRESS = "0x4723709088034723709088034723709088034723"; // Mock builder address
+const BUILDER_ADDRESS = "0x4BAe828dfd6adC241000502E15e346C24DE69220"; // User's builder address
 
 export function useSmartTransaction() {
   const { address, isConnected } = useAccount();
