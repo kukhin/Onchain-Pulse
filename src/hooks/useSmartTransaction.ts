@@ -18,7 +18,7 @@ function getBuilderSuffix(code: string): `0x${string}` {
 export function useSmartTransaction() {
   const { address, isConnected } = useAccount();
 
-  // Smart Wallet detectionф
+  // Smart Wallet detection
   const { data: capabilities } = useCapabilities({
     query: { 
       enabled: Boolean(address),
