@@ -1,0 +1,29 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOiAxLCAidHlwZSI6ICJjdXN0b2R5IiwgImtleSI6ICIweDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAifQ",
+    "payload": "eyJkb21haW4iOiAibXktZ29vZ2xlLWFpLXN0dWRpby1hcHAuYWkuYnVpbGQifQ",
+    "signature": "MHhkMDYwOTY1YjViNWU5ZTY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg2ODY4Njg"
+  },
+  "miniapp": {
+    "version": "1",
+    "name": "Base Pulse",
+    "subtitle": "Daily on-chain check-in",
+    "tagline": "Connect, pulse, level up.",
+    "description": "Base Pulse is a simple mini-app for the Base ecosystem. Check-in daily on-chain to build your streak and climb the leaderboard.",
+    "primaryCategory": "games",
+    "tags": ["base", "checkin", "onchain", "pulse"],
+    "homeUrl": "https://ais-dev-idukxiiwspatf27odsnh6k-472370908803.europe-west2.run.app",
+    "iconUrl": "https://ais-dev-idukxiiwspatf27odsnh6k-472370908803.europe-west2.run.app/icon.png",
+    "splashImageUrl": "https://ais-dev-idukxiiwspatf27odsnh6k-472370908803.europe-west2.run.app/splash.png",
+    "splashBackgroundColor": "#0a0a0a",
+    "heroImageUrl": "https://ais-dev-idukxiiwspatf27odsnh6k-472370908803.europe-west2.run.app/hero.png",
+    "screenshotUrls": [],
+    "ogTitle": "Base Pulse",
+    "ogDescription": "Daily on-chain check-in for Base.",
+    "ogImageUrl": "https://ais-dev-idukxiiwspatf27odsnh6k-472370908803.europe-west2.run.app/og.png"
+  },
+  "baseBuilder": {
+    "ownerAddress": "0x4BAe828dfd6adC241000502E15e346C24DE69220",
+    "builderCode": "bc_smhxjgjq"
+  }
+}
