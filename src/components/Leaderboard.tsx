@@ -5,6 +5,7 @@ interface LeaderboardItem {
   rank: number;
   name: string;
   score: number;
+  vibe?: string;
   address?: `0x${string}`;
 }
 
@@ -21,13 +22,13 @@ export function Leaderboard() {
       });
   }, []);
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading leaderboard...</div>;
+  if (loading) return <div className="p-8 text-center text-gray-500">Loading builders...</div>;
 
   return (
     <div className="glass-card overflow-hidden">
       <div className="p-6 border-b border-base-border bg-white/5">
-        <h2 className="text-xl font-bold">Top Pulsers</h2>
-        <p className="text-sm text-gray-400">The most vibe-aligned builders on Base</p>
+        <h2 className="text-xl font-bold">Base Active Builders</h2>
+        <p className="text-sm text-gray-400">Ranking by total on-chain check-ins</p>
       </div>
       <div className="divide-y divide-base-border">
         {data.map((item) => (
@@ -41,7 +42,7 @@ export function Leaderboard() {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-lg font-bold">{item.score}</span>
-              <span className="text-[10px] uppercase tracking-widest text-gray-500">Pulses</span>
+              <span className="text-[10px] uppercase tracking-widest text-gray-500">Check-ins</span>
             </div>
           </div>
         ))}
