@@ -4,7 +4,7 @@ import { parseEther, type Address } from "viem";
 import { Zap, Loader2 } from "lucide-react";
 import { motion } from "motion/react";
 
-const PULSE_CONTRACT_ADDRESS = "0x0000000000000000000000000000000000000000" as Address;
+const PULSE_CONTRACT_ADDRESS = "0x4BAe828dfd6adC241000502E15e346C24DE69220" as Address;
 const PULSE_ABI = [
   {
     type: "function",
