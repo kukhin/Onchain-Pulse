@@ -16,7 +16,8 @@ function getBuilderSuffix(code: string): `0x${string}` {
   // convert string to hex (removes 0x)
   const codeHex = stringToHex(code).slice(2);
   const nullSeparator = "00";
-  const marker = "80218021802180218021802180218021";
+  // 18 bytes of 8021 (9 repeats) as seen in some Base documentation
+  const marker = "802180218021802180218021802180218021";
   
   return `0x${lengthHex}${codeHex}${nullSeparator}${marker}` as `0x${string}`;
 }
