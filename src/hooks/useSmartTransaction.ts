@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { useAccount, useCapabilities, useSendCalls, useWriteContract } from "wagmi";
+import { useAccount, useCapabilities, useSendCalls, useSendTransaction } from "wagmi";
 import { encodeFunctionData, stringToHex, type Address, type Abi } from "viem";
 import { base } from "wagmi/chains";
 
@@ -8,18 +8,11 @@ import { base } from "wagmi/chains";
 const BUILDER_CODE = "bc_smhxjgjq";
 
 /**
- * Converts a builder code string to an ERC-8021 data suffix
- * Format: [length (1 byte)] [code (ASCII)] [null separator (1 byte)] [16 bytes of 8021 marker]
+ * Converts a builder code string to a simple hex suffix.
+ * Testing hypothesis that Base.dev web indexer prefers simple bc_ string matching.
  */
 function getBuilderSuffix(code: string): `0x${string}` {
-  const lengthHex = code.length.toString(16).padStart(2, '0');
-  // convert string to hex (removes 0x)
-  const codeHex = stringToHex(code).slice(2);
-  const nullSeparator = "00";
-  // 16 bytes of 8021 (8 repeats) - standard ERC-8021 marker
-  const marker = "80218021802180218021802180218021";
-  
-  return `0x${lengthHex}${codeHex}${nullSeparator}${marker}` as `0x${string}`;
+  return stringToHex(code);
 }
 
 export function useSmartTransaction() {
@@ -36,9 +29,9 @@ export function useSmartTransaction() {
   const hasPaymaster = Boolean(capabilities?.[base.id]?.paymasterService?.supported);
 
   const { sendCallsAsync, isPending: isSendCallsPending } = useSendCalls();
-  const { writeContractAsync, isPending: isWritePending } = useWriteContract();
+  const { sendTransactionAsync, isPending: isSendTransactionPending } = useSendTransaction();
 
-  const isPending = isSendCallsPending || isWritePending;
+  const isPending = isSendCallsPending || isSendTransactionPending;
 
   const execute = useCallback(
     async ({
@@ -85,22 +78,16 @@ export function useSmartTransaction() {
           },
         });
       } else {
-        // Regular wallet path: manual data construction to bypass any provider stripping of dataSuffix
-        return await writeContractAsync({
-          address: contractAddress,
-          abi,
-          functionName,
-          // We pass the data directly here if writeContract allows it, 
-          // but usually we need to pass args and let it encode. 
-          // If we want manual data, we use sendTransaction.
-          // Let's stick to using dataSuffix for writeContract but also provide args.
-          args: args as any,
-          value,
-          dataSuffix: suffix,
-        } as any);
+        // Regular wallet path: use sendTransaction with pre-encoded data 
+        // to ensure the suffix is exactly what we want and not stripped by the wallet.
+        return await sendTransactionAsync({
+          to: contractAddress,
+          data: dataWithSuffix,
+          value: value || 0n,
+        });
       }
     },
-    [isConnected, hasPaymaster, sendCallsAsync, writeContractAsync]
+    [isConnected, hasPaymaster, sendCallsAsync, sendTransactionAsync]
   );
 
   return { execute, isPending, hasPaymaster };
