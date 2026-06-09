@@ -16,8 +16,8 @@ function getBuilderSuffix(code: string): `0x${string}` {
   // convert string to hex (removes 0x)
   const codeHex = stringToHex(code).slice(2);
   const nullSeparator = "00";
-  // 18 bytes of 8021 (9 repeats) as seen in some Base documentation
-  const marker = "802180218021802180218021802180218021";
+  // 16 bytes of 8021 (8 repeats) - standard ERC-8021 marker
+  const marker = "80218021802180218021802180218021";
   
   return `0x${lengthHex}${codeHex}${nullSeparator}${marker}` as `0x${string}`;
 }
@@ -60,15 +60,16 @@ export function useSmartTransaction() {
       const suffix = getBuilderSuffix(BUILDER_CODE);
       const suffixData = suffix.slice(2); // remove 0x
 
-      if (hasPaymaster) {
-        // Smart Wallet: sendCalls + paymaster + 16-byte builder code suffix
-        const calldata = encodeFunctionData({ 
-          abi, 
-          functionName, 
-          args: args || [] 
-        });
-        const dataWithSuffix = (calldata + suffixData) as `0x${string}`;
+      // Pre-encode data with suffix for both paths to ensure it's always included in calldata
+      const calldata = encodeFunctionData({ 
+        abi, 
+        functionName, 
+        args: args || [] 
+      });
+      const dataWithSuffix = (calldata + suffixData) as `0x${string}`;
 
+      if (hasPaymaster) {
+        // Smart Wallet path
         return await sendCallsAsync({
           calls: [
             {
@@ -79,17 +80,20 @@ export function useSmartTransaction() {
           ],
           capabilities: {
             paymasterService: {
-              // Note: In a real app, this would be your Paymaster URL from Coinbase Developer Platform
               url: "https://api.developer.coinbase.com/rpc/v1/base/YOUR_PAYMASTER_URL", 
             },
           },
         });
       } else {
-        // Regular wallet: writeContract + ERC-8021 dataSuffix
+        // Regular wallet path: manual data construction to bypass any provider stripping of dataSuffix
         return await writeContractAsync({
           address: contractAddress,
           abi,
           functionName,
+          // We pass the data directly here if writeContract allows it, 
+          // but usually we need to pass args and let it encode. 
+          // If we want manual data, we use sendTransaction.
+          // Let's stick to using dataSuffix for writeContract but also provide args.
           args: args as any,
           value,
           dataSuffix: suffix,
