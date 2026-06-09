@@ -8,11 +8,17 @@ import { base } from "wagmi/chains";
 const BUILDER_CODE = "bc_smhxjgjq";
 
 /**
- * Converts a builder code string to a 16-byte hex suffix (ERC-8021)
+ * Converts a builder code string to an ERC-8021 data suffix
+ * Format: [length (1 byte)] [code (ASCII)] [null separator (1 byte)] [16 bytes of 8021 marker]
  */
 function getBuilderSuffix(code: string): `0x${string}` {
-  // Encodes the string to hex and right-pads with zeros to exactly 16 bytes
-  return stringToHex(code, { size: 16 });
+  const lengthHex = code.length.toString(16).padStart(2, '0');
+  // convert string to hex (removes 0x)
+  const codeHex = stringToHex(code).slice(2);
+  const nullSeparator = "00";
+  const marker = "80218021802180218021802180218021";
+  
+  return `0x${lengthHex}${codeHex}${nullSeparator}${marker}` as `0x${string}`;
 }
 
 export function useSmartTransaction() {
